@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Wallet</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header.app-header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    main {
+      margin: 2rem auto;
+      max-width: 600px;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+      color: #4CAF50;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Button Styles */
+    button {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* Form Styles */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    #qrcode-container img {
+      margin-top: 1rem;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+    }
+
+    /* Login & Registration Styles */
+    .tabs {
+      display: flex;
+      background: #4CAF50;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .tabs button {
+      flex: 1;
+      background: transparent;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 10px 0;
+    }
+
+    .tabs button.active {
+      background: #45a049;
+      font-weight: bold;
+    }
+
+    .form-container {
+      padding: 20px;
+      display: none;
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+      outline: none;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Digital Wallet</h1>
+  </header>
+
+  <main>
+    <!-- Login and Registration Tabs -->
+    <div class="tabs">
+      <button id="login-tab" class="active">Login</button>
+      <button id="register-tab">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form" class="form-container active">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="login-email">Email:</label>
+        <input type="email" id="login-email" name="email" required>
+        <label for="login-password">Password:</label>
+        <input type="password" id="login-password" name="password" required>
+        <button type="submit">Login</button>
+      </form>
+      <p id="login-error" style="color: red; display: none;">Invalid credentials, please try again.</p>
+    </div>
+
+    <!-- Registration Form -->
+    <div id="register-form" class="form-container">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <label for="register-name">Full Name:</label>
+        <input type="text" id="register-name" name="name" required>
+        <label for="register-email">Email:</label>
+        <input type="email" id="register-email" name="email" required>
+        <label for="register-password">Password:</label>
+        <input type="password" id="register-password" name="password" required>
+        <label for="register-confirm-password">Confirm Password:</label>
+        <input type="password" id="register-confirm-password" name="confirm_password" required>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="dashboard-container" style="display:none;">
+      <h2>Dashboard</h2>
+      <p>Balance: <span id="balance"></span></p>
+      <button id="generate-qrcode">Generate UPI QR Code</button>
+      <div id="qrcode-container"></div>
+      
+      <!-- Send Money -->
+      <h3>Send Money</h3>
+      <form id="send-money-form">
+        <label for="recipient-email">Recipient Email:</label>
+        <input type="email" id="recipient-email" name="recipient-email" required>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+        <button type="submit">Send Money</button>
+      </form>
+
+      <!-- Shopping Section -->
+      <h3>Shopping</h3>
+      <p>Choose your favorite products and pay with your digital wallet.</p>
+      <img src="https://via.placeholder.com/300x150?text=Shopping" alt="Shopping Image">
+
+      <!-- Flight Booking -->
+      <h3>Book Flight</h3>
+      <p>Select your flight and make payments with your wallet.</p>
+      <img src="https://via.placeholder.com/300x150?text=Flight+Booking" alt="Flight Booking Image">
+    </section>
+  </main>
+
+  <script>
+    // User storage for demo purposes
+    const users = [];
+
+    // Handle Tab Switching
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const dashboard = document.getElementById('dashboard');
+    const loginError = document.getElementById('login-error');
+    
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginForm.classList.add('active');
+      registerForm.classList.remove('active');
+    });
+
+    registerTab.addEventListener('click', () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      registerForm.classList.add('active');
+      loginForm.classList.remove('active');
+    });
+
+    // Handle Login
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (user) {
+        dashboard.style.display = 'block';  // Show dashboard
+        loginForm.style.display = 'none';   // Hide login form
+        registerForm.style.display = 'none';  // Hide register form
+      } else {
+        loginError.style.display = 'block';  // Show error
+      }
+    });
+
+    // Handle Registration
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-confirm-password').value;
+      
+      if (password === confirmPassword) {
+        users.push({ name, email, password });
+        alert('Registration successful. Please log in.');
+        loginTab.click(); // Switch to login tab
+      } else {
+        alert('Passwords do not match!');
+      }
+    });
+
+    // Handle UPI QR Code Generation
+    document.getElementById('generate-qrcode').addEventListener('click', () => {
+      const qrCodeContainer = document.getElementById('qrcode-container');
+      qrCodeContainer.innerHTML = '<img src="https://via.placeholder.com/200" alt="Generated QR Code">';
+    });
+
+    // Handle Send Money
+    document.getElementById('send-money-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Money sent successfully!');
+    });
+  </script>
+</body>
+</html>
