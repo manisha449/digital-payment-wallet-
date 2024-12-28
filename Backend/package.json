@@ -8,7 +8,7 @@
       "dev": "nodemon index.js"
     },
     "keywords": ["digital-wallet", "mern", "upi", "train-bookings", "wallet"],
-    "author": "Your Name",
+    "author": "m",
     "license": "MIT",
     "dependencies": {
       "cors": "^2.8.5",
