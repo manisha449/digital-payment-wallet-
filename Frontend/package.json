@@ -9,7 +9,7 @@
       "preview": "vite preview"
     },
     "keywords": ["digital-wallet", "frontend", "vite", "tailwindcss"],
-    "author": "Your Name",
+    "author": "m",
     "license": "MIT",
     "dependencies": {
       "react": "^18.2.0",
