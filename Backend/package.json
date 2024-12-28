@@ -1,0 +1,24 @@
+{
+    "name": "paytm-project-backend",
+    "version": "1.0.0",
+    "description": "Backend for a digital wallet system with train bookings, UPI QR codes, and wallet features.",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js",
+      "dev": "nodemon index.js"
+    },
+    "keywords": ["digital-wallet", "mern", "upi", "train-bookings", "wallet"],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+      "cors": "^2.8.5",
+      "dotenv": "^16.0.3",
+      "express": "^4.18.2",
+      "jsonwebtoken": "^9.0.0",
+      "mongoose": "^7.0.2",
+      "qrcode": "^1.5.1"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.1"
+    }
+  }
